@@ -20,6 +20,7 @@
 *.rar
 *.iml
 *.MF
+*.DS_Store
 /out
 /.idea
 
