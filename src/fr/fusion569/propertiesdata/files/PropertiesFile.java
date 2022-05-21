@@ -33,7 +33,7 @@ public class PropertiesFile {
     public PropertiesFile(String path, String name, StandardFileCreationType standardFileCreationType, StandardDirectoryCreationType standardDirectoryCreationType, KeyValueSeparator keyValueSeparator) {
         this.path = path;
         this.name = name + FILE_EXTENSION;
-        this.absolutePath = this.name + this.path;
+        this.absolutePath = this.path + this.name;
         this.standardFileCreationType = standardFileCreationType;
         this.standardDirectoryCreationType = standardDirectoryCreationType;
         this.keyValueSeparator = keyValueSeparator;
