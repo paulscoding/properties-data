@@ -6,6 +6,10 @@ package fr.fusion569.propertiesdata.utils;
 public enum KeyValueSeparator {
 
     /**
+     * The key value separator in the {@link java.io.File} will be " ".
+     */
+    SPACE(" "),
+    /**
      * The key value separator in the {@link java.io.File} will be "=".
      */
     EQUAL("="),

@@ -10,9 +10,9 @@ public enum StandardFileCreationType {
     /**
      * Only the wanted {@link java.io.File} will be created.
      */
-    ONLY_FILE_WANTED,
+    ONLY_WANTED_FILE,
     /**
      * Only the wanted {@link java.io.File} and its copy will be created.
      */
-    FILE_WANTED_WITH_COPY;
+    WANTED_FILE_WITH_COPY;
 }

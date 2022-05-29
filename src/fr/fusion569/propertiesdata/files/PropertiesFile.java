@@ -1,20 +1,12 @@
 package fr.fusion569.propertiesdata.files;
 
 import fr.fusion569.propertiesdata.PropertiesData;
-import fr.fusion569.propertiesdata.events.booleans.BooleanEvent;
-import fr.fusion569.propertiesdata.events.Event;
-import fr.fusion569.propertiesdata.events.numbers.DoubleNumberEvent;
-import fr.fusion569.propertiesdata.events.numbers.FloatNumberEvent;
-import fr.fusion569.propertiesdata.events.numbers.IntegerNumberEvent;
-import fr.fusion569.propertiesdata.events.strings.StringEvent;
 import fr.fusion569.propertiesdata.utils.KeyValueSeparator;
 import fr.fusion569.propertiesdata.utils.StandardDirectoryCreationType;
 import fr.fusion569.propertiesdata.utils.StandardFileCreationType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PropertiesFile {
 
@@ -121,7 +113,7 @@ public class PropertiesFile {
     }
 
     /**
-     * Create the {@link File} as constructor and its copy if the {@link StandardFileCreationType} as constructor is {@link StandardFileCreationType#FILE_WANTED_WITH_COPY}.
+     * Create the {@link File} as constructor and its copy if the {@link StandardFileCreationType} as constructor is {@link StandardFileCreationType#WANTED_FILE_WITH_COPY}.
      */
     public void create() {
         final File dir = new File(this.path);
@@ -144,12 +136,14 @@ public class PropertiesFile {
         } else {
             System.out.println(PropertiesData.getLogsPrefix() + "No file created.");
         }
-        if(this.standardFileCreationType.equals(StandardFileCreationType.FILE_WANTED_WITH_COPY)) {
+        if(this.standardFileCreationType.equals(StandardFileCreationType.WANTED_FILE_WITH_COPY)) {
             this.createCopy();
+        } else {
+            System.out.println(PropertiesData.getLogsPrefix() + "No copy created.");
         }
         try {
             this.bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file), StandardCharsets.UTF_8));
-        } catch(FileNotFoundException e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
@@ -198,15 +192,6 @@ public class PropertiesFile {
     }
 
     /**
-     * Throw an {@link IllegalArgumentException} if the {@link PropertiesData} {@link Event} {@link java.util.List} is empty.
-     */
-    private void throwEmptyEventsListException() {
-        if(PropertiesData.getEventsList().isEmpty()) {
-            throw new IllegalArgumentException("You must register an event before using one.");
-        }
-    }
-
-    /**
      * Get a {@link String} value from a {@link String} key without quotation marks.
      *
      * @param key
@@ -229,7 +214,7 @@ public class PropertiesFile {
 
                         if(kv.length >= 3) {
                             for(int i = 2; i < kv.length; i++) {
-                                kv[1] = kv[1] + this.keyValueSeparator.getSeparator() + kv[i];
+                                kv[1] += this.keyValueSeparator.getSeparator() + kv[i];
                             }
                         }
                         this.resetBufferedReader();
@@ -241,7 +226,6 @@ public class PropertiesFile {
         } catch(IOException e) {
             e.printStackTrace();
         }
-        this.resetBufferedReader();
         throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
     }
 
@@ -268,7 +252,7 @@ public class PropertiesFile {
 
                         if(kv.length >= 3) {
                             for(int i = 2; i < kv.length; i++) {
-                                kv[1] = kv[1] + this.keyValueSeparator.getSeparator() + kv[i];
+                                kv[1] += this.keyValueSeparator.getSeparator() + kv[i];
                             }
                         }
                         this.resetBufferedReader();
@@ -284,57 +268,20 @@ public class PropertiesFile {
         } catch(IOException e) {
             e.printStackTrace();
         }
-        this.resetBufferedReader();
         throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
     }
 
     /**
-     * Get all {@link StringEvent} registered in {@link PropertiesData#getEventsList()} to execute them.
-     * Also put the {@link String} parsed value in the {@link StringEvent#on(String, String)} method.
+     * Get a {@link Integer} value from a {@link String} key.
      *
      * @param key
-     * The {@link String} key to put it in the {@link IntegerNumberEvent#on(String, int)} method.
-     */
-    public void getStringWithListener(String key) {
-        this.throwEmptyEventsListException();
-        final String val = this.getString(key);
-
-        for(Event event : PropertiesData.getEventsList()) {
-            if(event instanceof StringEvent) {
-                ((StringEvent) event).on(key, val);
-            }
-        }
-    }
-
-    /**
-     * Get a {@link Integer} value from a {@link String} key without listener check.
-     *
-     * @param key
-     * The {@link String} key to get a {@link Integer} value without listener check.
+     * The {@link String} key to get a {@link Integer} value.
      *
      * @return
-     * A {@link Integer} value from a {@link String} key without listener check.
+     * A {@link Integer} value from a {@link String} key.
      */
     public int getInteger(String key) {
         return Integer.parseInt(this.getStringWithoutQuotationMarks(key));
-    }
-
-    /**
-     * Get all {@link IntegerNumberEvent} registered in {@link PropertiesData#getEventsList()} to execute them.
-     * Also put the {@link Integer} parsed value in the {@link IntegerNumberEvent#on(String, int)} method.
-     *
-     * @param key
-     * The {@link String} key to put it in the {@link IntegerNumberEvent#on(String, int)} method.
-     */
-    public void getIntegerWithListener(String key) {
-        this.throwEmptyEventsListException();
-        final int val = Integer.parseInt(this.getStringWithoutQuotationMarks(key));
-
-        for(Event event : PropertiesData.getEventsList()) {
-            if(event instanceof IntegerNumberEvent) {
-                ((IntegerNumberEvent) event).on(key, val);
-            }
-        }
     }
 
     /**
@@ -351,24 +298,6 @@ public class PropertiesFile {
     }
 
     /**
-     * Get all {@link DoubleNumberEvent} registered in {@link PropertiesData#getEventsList()} to execute them.
-     * Also put the {@link Double} parsed value in the {@link DoubleNumberEvent#on(String, double)} method.
-     *
-     * @param key
-     * The {@link String} key to put it in the {@link DoubleNumberEvent#on(String, double)} method.
-     */
-    public void getDoubleWithListener(String key) {
-        this.throwEmptyEventsListException();
-        final double val = Double.parseDouble(this.getStringWithoutQuotationMarks(key));
-
-        for(Event event : PropertiesData.getEventsList()) {
-            if(event instanceof DoubleNumberEvent) {
-                ((DoubleNumberEvent) event).on(key, val);
-            }
-        }
-    }
-
-    /**
      * Get a {@link Float} value from a {@link String} key.
      *
      * @param key
@@ -379,24 +308,6 @@ public class PropertiesFile {
      */
     public float getFloat(String key) {
         return Float.parseFloat(this.getStringWithoutQuotationMarks(key));
-    }
-
-    /**
-     * Get all {@link FloatNumberEvent} registered in {@link PropertiesData#getEventsList()} to execute them.
-     * Also put the {@link Float} parsed value in the {@link FloatNumberEvent#on(String, float)} method.
-     *
-     * @param key
-     * The {@link String} key to put it in the {@link FloatNumberEvent#on(String, float)} method.
-     */
-    public void getFloatWithListener(String key) {
-        this.throwEmptyEventsListException();
-        final float val = Float.parseFloat(this.getStringWithoutQuotationMarks(key));
-
-        for(Event event : PropertiesData.getEventsList()) {
-            if(event instanceof FloatNumberEvent) {
-                ((FloatNumberEvent) event).on(key, val);
-            }
-        }
     }
 
     /**
@@ -411,48 +322,4 @@ public class PropertiesFile {
     public boolean getBoolean(String key) {
         return Boolean.parseBoolean(this.getStringWithoutQuotationMarks(key));
     }
-
-    /**
-     * Get all {@link BooleanEvent} registered in {@link PropertiesData#getEventsList()} to execute them.
-     * Also put the {@link Boolean} parsed value in the {@link BooleanEvent#on(String, boolean)} method.
-     *
-     * @param key
-     * The {@link String} key to put it in the {@link BooleanEvent#on(String, boolean)} method.
-     */
-    public void getBooleanWithListener(String key) {
-        this.throwEmptyEventsListException();
-        final boolean val = Boolean.parseBoolean(this.getStringWithoutQuotationMarks(key));
-
-        for(Event event : PropertiesData.getEventsList()) {
-            if(event instanceof BooleanEvent) {
-                ((BooleanEvent) event).on(key, val);
-            }
-        }
-    }
-
-    /*
-    public boolean isEmpty() {
-        final List<String> lines = new ArrayList<>();
-        String line;
-
-        try {
-            line = this.bufferedReader.readLine();
-
-            while(line != null) {
-                lines.add(line);
-                line = this.bufferedReader.readLine();
-            }
-            for(String s : lines) {
-                if(!s.equals("")) {
-                    this.resetBufferedReader();
-                    return false;
-                }
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        this.resetBufferedReader();
-        return true;
-    }
-     */
 }
