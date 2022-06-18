@@ -130,7 +130,7 @@ public final class PropertiesFile {
         } else {
             System.out.println(PropertiesData.getLogsPrefix() + "No copy created.");
         }
-        this.propertiesFileDataGetter = new PropertiesFileDataGetter(this.file, keyValueSeparator);
+        this.propertiesFileDataGetter = new PropertiesFileDataGetter(this.file, this.keyValueSeparator);
     }
 
     /**
