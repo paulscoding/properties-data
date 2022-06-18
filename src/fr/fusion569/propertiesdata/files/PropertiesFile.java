@@ -102,6 +102,16 @@ public final class PropertiesFile {
     }
 
     /**
+     * Get the {@link PropertiesFileDataGetter}.
+     *
+     * @return
+     * The {@link PropertiesFileDataGetter}.
+     */
+    public PropertiesFileDataGetter getPropertiesFileDataGetter() {
+        return propertiesFileDataGetter;
+    }
+
+    /**
      * Create the {@link File} as constructor and its copy if the {@link StandardFileCreationType} as constructor is {@link StandardFileCreationType#WANTED_FILE_WITH_COPY}.
      */
     public void create() {
