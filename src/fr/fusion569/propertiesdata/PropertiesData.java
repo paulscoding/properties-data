@@ -3,7 +3,7 @@ package fr.fusion569.propertiesdata;
 /**
  * This class represents the main class.
  */
-public class PropertiesData {
+public final class PropertiesData {
 
     /**
      * The prefix in logs message.
