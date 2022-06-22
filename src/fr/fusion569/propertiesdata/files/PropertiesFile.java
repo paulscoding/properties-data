@@ -108,6 +108,16 @@ public class PropertiesFile {
     }
 
     /**
+     * Get the {@link String} {@link List} lines.
+     *
+     * @return
+     * The {@link String} {@link List} lines.
+     */
+    public List<String> getLines() {
+        return lines;
+    }
+
+    /**
      * Get the {@link BufferedReader}.
      *
      * @return
@@ -360,20 +370,26 @@ public class PropertiesFile {
     public void setString(String key, String value) {
         this.throwKeyExceptions(key);
         try {
-            for(String line : this.lines) {
-                if(line.startsWith(key)) {
-                    if(line.contains(this.keyValueSeparator.getSeparator())) {
-                        final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
+            if(!this.lines.isEmpty()) {
+                boolean containsLine = false;
 
-                        if(keyValueArray.length >= 3) {
-                            for(int i = 2; i < keyValueArray.length; i++) {
-                                keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
+                for(String line : this.lines) {
+                    if(line.startsWith(key)) {
+                        if(line.contains(this.keyValueSeparator.getSeparator())) {
+                            final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
+
+                            if(keyValueArray.length >= 3) {
+                                for(int i = 2; i < keyValueArray.length; i++) {
+                                    keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
+                                }
                             }
+                            containsLine = true;
+                            keyValueArray[1] = value;
+                            this.lines.set(this.lines.indexOf(line), keyValueArray[0] + this.keyValueSeparator.getSeparator() + "\"" + keyValueArray[1] + "\"");
                         }
-                        keyValueArray[1] = value;
-                        this.lines.set(this.lines.indexOf(line), keyValueArray[0] + this.keyValueSeparator.getSeparator() + "\"" + keyValueArray[1] + "\"");
                     }
-                } else {
+                }
+                if(!containsLine) {
                     this.lines.add(key + this.keyValueSeparator.getSeparator() + "\"" + value + "\"");
                 }
                 this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file), StandardCharsets.UTF_8));
@@ -381,13 +397,17 @@ public class PropertiesFile {
                     this.bufferedWriter.write(l);
                     this.bufferedWriter.newLine();
                 }
-                this.bufferedWriter.flush();
-                return;
+            } else {
+                final String line = key + this.keyValueSeparator.getSeparator() + "\"" + value + "\"";
+
+                this.lines.add(line);
+                this.bufferedWriter.write(line);
             }
+            this.bufferedWriter.flush();
+            return;
         } catch(IOException e) {
             e.printStackTrace();
         }
-        // TODO - Check why when file is empty, this exception is thrown.
         throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
     }
 }
