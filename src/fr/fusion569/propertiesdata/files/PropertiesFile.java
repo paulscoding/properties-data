@@ -237,7 +237,7 @@ public class PropertiesFile {
      * @return
      * A {@link String} value from a {@link String} key without quotation marks.
      */
-    private String getStringWithoutQuotationMarksCondition(String key, boolean withQuotationMarks) {
+    private String getStringWithQuotationMarksCondition(String key, boolean withQuotationMarks) {
         this.throwKeyExceptions(key);
         String line;
 
@@ -285,7 +285,7 @@ public class PropertiesFile {
      * A {@link String} value from a {@link String} key with quotation marks.
      */
     public String getString(String key) {
-        return this.getStringWithoutQuotationMarksCondition(key, true);
+        return this.getStringWithQuotationMarksCondition(key, true);
     }
 
     /**
@@ -298,7 +298,7 @@ public class PropertiesFile {
      * A {@link Integer} value from a {@link String} key.
      */
     public int getInteger(String key) {
-        return Integer.parseInt(this.getStringWithoutQuotationMarksCondition(key, false));
+        return Integer.parseInt(this.getStringWithQuotationMarksCondition(key, false));
     }
 
     /**
@@ -311,7 +311,7 @@ public class PropertiesFile {
      * A {@link Double} value from a {@link String} key.
      */
     public double getDouble(String key) {
-        return Double.parseDouble(this.getStringWithoutQuotationMarksCondition(key, false));
+        return Double.parseDouble(this.getStringWithQuotationMarksCondition(key, false));
     }
 
     /**
@@ -324,7 +324,7 @@ public class PropertiesFile {
      * A {@link Float} value from a {@link String} key.
      */
     public float getFloat(String key) {
-        return Float.parseFloat(this.getStringWithoutQuotationMarksCondition(key, false));
+        return Float.parseFloat(this.getStringWithQuotationMarksCondition(key, false));
     }
 
     /**
@@ -337,7 +337,7 @@ public class PropertiesFile {
      * A {@link Boolean} value from a {@link String} key.
      */
     public boolean getBoolean(String key) {
-        return Boolean.parseBoolean(this.getStringWithoutQuotationMarksCondition(key, false));
+        return Boolean.parseBoolean(this.getStringWithQuotationMarksCondition(key, false));
     }
 
     private <V> void setStringWithQuotationMarksCondition(String key, V value, boolean withQuotationMarks) {
