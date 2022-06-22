@@ -237,7 +237,7 @@ public class PropertiesFile {
      * @return
      * A {@link String} value from a {@link String} key without quotation marks.
      */
-    private String getStringWithoutQuotationMarks(String key) {
+    private String getStringWithoutQuotationMarksCondition(String key, boolean withQuotationMarks) {
         this.throwKeyExceptions(key);
         String line;
 
@@ -255,7 +255,15 @@ public class PropertiesFile {
                             }
                         }
                         this.resetBufferedReader();
-                        return keyValueArray[1];
+                        if(withQuotationMarks) {
+                            if(keyValueArray[1].startsWith("\"") && keyValueArray[1].endsWith("\"")) {
+                                return keyValueArray[1].substring(1, keyValueArray[1].length() - 1);
+                            } else {
+                                throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Your value must include \" at end and the beginning.");
+                            }
+                        } else {
+                            return keyValueArray[1];
+                        }
                     }
                 }
                 line = this.bufferedReader.readLine();
@@ -277,37 +285,7 @@ public class PropertiesFile {
      * A {@link String} value from a {@link String} key with quotation marks.
      */
     public String getString(String key) {
-        this.throwKeyExceptions(key);
-        String line;
-
-        try {
-            line = this.bufferedReader.readLine();
-
-            while(line != null) {
-                if(line.startsWith(key)) {
-                    if(line.contains(this.keyValueSeparator.getSeparator())) {
-                        final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
-
-                        if(keyValueArray.length >= 3) {
-                            for(int i = 2; i < keyValueArray.length; i++) {
-                                keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
-                            }
-                        }
-                        this.resetBufferedReader();
-                        if(keyValueArray[1].startsWith("\"") && keyValueArray[1].endsWith("\"")) {
-                            return keyValueArray[1].substring(1, keyValueArray[1].length() - 1);
-                        } else {
-                            throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Your value must include \" at end and the beginning.");
-                        }
-                    }
-                }
-                line = this.bufferedReader.readLine();
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        this.resetBufferedReader();
-        throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
+        return this.getStringWithoutQuotationMarksCondition(key, true);
     }
 
     /**
@@ -320,7 +298,7 @@ public class PropertiesFile {
      * A {@link Integer} value from a {@link String} key.
      */
     public int getInteger(String key) {
-        return Integer.parseInt(this.getStringWithoutQuotationMarks(key));
+        return Integer.parseInt(this.getStringWithoutQuotationMarksCondition(key, false));
     }
 
     /**
@@ -333,7 +311,7 @@ public class PropertiesFile {
      * A {@link Double} value from a {@link String} key.
      */
     public double getDouble(String key) {
-        return Double.parseDouble(this.getStringWithoutQuotationMarks(key));
+        return Double.parseDouble(this.getStringWithoutQuotationMarksCondition(key, false));
     }
 
     /**
@@ -346,7 +324,7 @@ public class PropertiesFile {
      * A {@link Float} value from a {@link String} key.
      */
     public float getFloat(String key) {
-        return Float.parseFloat(this.getStringWithoutQuotationMarks(key));
+        return Float.parseFloat(this.getStringWithoutQuotationMarksCondition(key, false));
     }
 
     /**
@@ -359,7 +337,7 @@ public class PropertiesFile {
      * A {@link Boolean} value from a {@link String} key.
      */
     public boolean getBoolean(String key) {
-        return Boolean.parseBoolean(this.getStringWithoutQuotationMarks(key));
+        return Boolean.parseBoolean(this.getStringWithoutQuotationMarksCondition(key, false));
     }
 
     private <V> void setStringWithQuotationMarksCondition(String key, V value, boolean withQuotationMarks) {

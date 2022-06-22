@@ -56,5 +56,10 @@ public final class PropertiesData {
         file.setDouble("height", 1.60);
         file.setFloat("weight", 57.0f);
         file.setBoolean("has-gf", false);
+        System.out.println(file.getString("name"));
+        System.out.println(file.getInteger("age"));
+        System.out.println(file.getDouble("height"));
+        System.out.println(file.getFloat("weight"));
+        System.out.println(file.getBoolean("has-gf"));
     }
 }
