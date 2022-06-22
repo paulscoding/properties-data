@@ -51,9 +51,10 @@ public final class PropertiesData {
         );
 
         file.create();
-        file.setString("name", "test");
-        file.setString("age", "14");
-        file.setString("language", "Java");
-        file.setString("type", "library");
+        file.setString("name", "Paul");
+        file.setInteger("age", 14);
+        file.setDouble("height", 1.60);
+        file.setFloat("weight", 57.0f);
+        file.setBoolean("has-gf", false);
     }
 }

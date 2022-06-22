@@ -362,7 +362,7 @@ public class PropertiesFile {
         return Boolean.parseBoolean(this.getStringWithoutQuotationMarks(key));
     }
 
-    public void setString(String key, String value) {
+    private <V> void setStringWithQuotationMarksCondition(String key, V value, boolean withQuotationMarks) {
         this.throwKeyExceptions(key);
         try {
             if(!this.lines.isEmpty()) {
@@ -379,13 +379,15 @@ public class PropertiesFile {
                                 }
                             }
                             containsLine = true;
-                            keyValueArray[1] = value;
-                            this.lines.set(this.lines.indexOf(line), keyValueArray[0] + this.keyValueSeparator.getSeparator() + "\"" + keyValueArray[1] + "\"");
+                            keyValueArray[1] = String.valueOf(value);
+                            this.lines.set(this.lines.indexOf(line), withQuotationMarks ? keyValueArray[0] + this.keyValueSeparator.getSeparator() + "\"" + keyValueArray[1] + "\"" : keyValueArray[0] + this.keyValueSeparator.getSeparator() + keyValueArray[1]);
                         }
                     }
                 }
+                final String line = withQuotationMarks ? key + this.keyValueSeparator.getSeparator() + "\"" + value + "\"" :  key + this.keyValueSeparator.getSeparator() + value;
+
                 if(!containsLine) {
-                    this.lines.add(key + this.keyValueSeparator.getSeparator() + "\"" + value + "\"");
+                    this.lines.add(line);
                 }
                 this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file), StandardCharsets.UTF_8));
                 for(String l : this.lines) {
@@ -393,7 +395,7 @@ public class PropertiesFile {
                     this.bufferedWriter.newLine();
                 }
             } else {
-                final String line = key + this.keyValueSeparator.getSeparator() + "\"" + value + "\"";
+                final String line = withQuotationMarks ? key + this.keyValueSeparator.getSeparator() + "\"" + value + "\"" :  key + this.keyValueSeparator.getSeparator() + value;
 
                 this.lines.add(line);
                 this.bufferedWriter.write(line);
@@ -404,5 +406,25 @@ public class PropertiesFile {
             e.printStackTrace();
         }
         throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
+    }
+
+    public void setString(String key, String value) {
+        this.setStringWithQuotationMarksCondition(key, value, true);
+    }
+
+    public void setInteger(String key, int value) {
+        this.setStringWithQuotationMarksCondition(key, value, false);
+    }
+
+    public void setDouble(String key, double value) {
+        this.setStringWithQuotationMarksCondition(key, value, false);
+    }
+
+    public void setFloat(String key, float value) {
+        this.setStringWithQuotationMarksCondition(key, value, false);
+    }
+
+    public void setBoolean(String key, boolean value) {
+        this.setStringWithQuotationMarksCondition(key, value, false);
     }
 }
