@@ -52,5 +52,8 @@ public final class PropertiesData {
 
         file.create();
         file.setString("name", "test");
+        file.setString("age", "14");
+        file.setString("language", "Java");
+        file.setString("type", "library");
     }
 }

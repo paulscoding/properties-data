@@ -155,30 +155,26 @@ public class PropertiesFile {
     public void create() {
         final File dir = new File(this.path);
 
-        if(!dir.exists()) {
-            if(this.standardDirectoryCreationType.equals(StandardDirectoryCreationType.CREATE)) {
-                dir.mkdir();
-                System.out.println(PropertiesData.getLogsPrefix() + "The directory " + this.absolutePath + " has been created.");
+        try {
+            if(!dir.exists()) {
+                if(this.standardDirectoryCreationType.equals(StandardDirectoryCreationType.CREATE)) {
+                    dir.mkdir();
+                    System.out.println(PropertiesData.getLogsPrefix() + "The directory " + this.absolutePath + " has been created.");
+                }
+            } else {
+                System.out.println(PropertiesData.getLogsPrefix() + "No directory created.");
             }
-        } else {
-            System.out.println(PropertiesData.getLogsPrefix() + "No directory created.");
-        }
-        if(!this.file.exists()) {
-            try {
+            if(!this.file.exists()) {
                 this.file.createNewFile();
                 System.out.println(PropertiesData.getLogsPrefix() + "The file " + this.absolutePath + " has been created.");
-            } catch(IOException e) {
-                e.printStackTrace();
+            } else {
+                System.out.println(PropertiesData.getLogsPrefix() + "No file created.");
             }
-        } else {
-            System.out.println(PropertiesData.getLogsPrefix() + "No file created.");
-        }
-        if(this.standardFileCreationType.equals(StandardFileCreationType.WANTED_FILE_WITH_COPY)) {
-            this.createCopy();
-        } else {
-            System.out.println(PropertiesData.getLogsPrefix() + "No copy created.");
-        }
-        try {
+            if(this.standardFileCreationType.equals(StandardFileCreationType.WANTED_FILE_WITH_COPY)) {
+                this.createCopy();
+            } else {
+                System.out.println(PropertiesData.getLogsPrefix() + "No copy created.");
+            }
             this.bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file), StandardCharsets.UTF_8));
             String line;
             line = this.bufferedReader.readLine();
@@ -188,7 +184,6 @@ public class PropertiesFile {
                 line = this.bufferedReader.readLine();
             }
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file), StandardCharsets.UTF_8));
-
             for(String l : this.lines) {
                 this.bufferedWriter.write(l);
                 this.bufferedWriter.newLine();
@@ -206,15 +201,15 @@ public class PropertiesFile {
     private void createCopy() {
         final File copy = new File(this.path, "copy-" + this.name);
 
-        if(!copy.exists()) {
-            try {
+        try {
+            if(!copy.exists()) {
                 copy.createNewFile();
                 System.out.println(PropertiesData.getLogsPrefix() + "The copy file " + this.path + "copy-" + this.name + " of " + this.absolutePath + " has been created.");
-            } catch(IOException e) {
-                e.printStackTrace();
+            } else {
+                System.out.println(PropertiesData.getLogsPrefix() + "No copy created.");
             }
-        } else {
-            System.out.println(PropertiesData.getLogsPrefix() + "No copy created.");
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
 
