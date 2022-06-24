@@ -229,13 +229,13 @@ public class PropertiesFile {
     }
 
     /**
-     * Get a {@link String} value from a {@link String} key without quotation marks.
+     * Get a {@link String} value from a {@link String} key with/without quotation marks.
      *
      * @param key
-     * The {@link String} key to get a {@link String} value without quotation marks.
+     * The {@link String} key to get a {@link String} value with/without quotation marks.
      *
      * @return
-     * A {@link String} value from a {@link String} key without quotation marks.
+     * A {@link String} value from a {@link String} key with/without quotation marks.
      */
     private String getStringWithQuotationMarksCondition(String key, boolean withQuotationMarks) {
         this.throwKeyExceptions(key);
@@ -295,7 +295,7 @@ public class PropertiesFile {
      * The {@link String} key to get a {@link Integer} value.
      *
      * @return
-     * A {@link Integer} value from a {@link String} key.
+     * An {@link Integer} value from a {@link String} key.
      */
     public int getInteger(String key) {
         return Integer.parseInt(this.getStringWithQuotationMarksCondition(key, false));
@@ -340,6 +340,21 @@ public class PropertiesFile {
         return Boolean.parseBoolean(this.getStringWithQuotationMarksCondition(key, false));
     }
 
+    /**
+     * Set an {@link Object} value from a {@link String} key.
+     *
+     * @param key
+     * The {@link String} key to set a {@link Object} value.
+     *
+     * @param value
+     * The {@link Object} value set from a {@link String} key.
+     *
+     * @param withQuotationMarks
+     * The condition to set or no the quotation marks at the end and the beginning of the {@link Object} value.
+     *
+     * @param <V>
+     * The value ({@link String}, {@link Integer}, {@link Double}, {@link Float}, {@link Boolean}) set in the {@link File} from a {@link String} key.
+     */
     private <V> void setStringWithQuotationMarksCondition(String key, V value, boolean withQuotationMarks) {
         this.throwKeyExceptions(key);
         try {
@@ -386,22 +401,67 @@ public class PropertiesFile {
         throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
     }
 
+    /**
+     * Set a {@link String} value from a {@link String} key.
+     *
+     * @param key
+     * The {@link String} key to set a {@link String} value.
+     *
+     * @param value
+     * The {@link String} value set from a {@link String} key.
+     */
     public void setString(String key, String value) {
         this.setStringWithQuotationMarksCondition(key, value, true);
     }
 
+    /**
+     * Set an {@link Integer} value from a {@link String} key.
+     *
+     * @param key
+     * The {@link String} key to set a {@link Integer} value.
+     *
+     * @param value
+     * The {@link Integer} value set from a {@link String} key.
+     */
     public void setInteger(String key, int value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
+    /**
+     * Set a {@link Double} value from a {@link String} key.
+     *
+     * @param key
+     * The {@link String} key to set a {@link Double} value.
+     *
+     * @param value
+     * The {@link Double} value set from a {@link String} key.
+     */
     public void setDouble(String key, double value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
+    /**
+     * Set a {@link Float} value from a {@link String} key.
+     *
+     * @param key
+     * The {@link String} key to set a {@link Float} value.
+     *
+     * @param value
+     * The {@link Float} value set from a {@link String} key.
+     */
     public void setFloat(String key, float value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
+    /**
+     * Set a {@link Boolean} value from a {@link String} key.
+     *
+     * @param key
+     * The {@link String} key to set a {@link Boolean} value.
+     *
+     * @param value
+     * The {@link Boolean} value set from a {@link String} key.
+     */
     public void setBoolean(String key, boolean value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
