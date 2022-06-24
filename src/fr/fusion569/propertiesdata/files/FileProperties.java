@@ -7,6 +7,7 @@ import fr.fusion569.propertiesdata.utils.StandardFileCreationType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,7 +144,7 @@ public class FileProperties {
     private void resetBufferedReader() {
         try {
             this.bufferedReader.close();
-            this.bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file), StandardCharsets.UTF_8));
+            this.bufferedReader = new BufferedReader(new InputStreamReader(Files.newInputStream(this.file.toPath()), StandardCharsets.UTF_8));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -175,7 +176,7 @@ public class FileProperties {
             } else {
                 System.out.println(PropertiesData.getLogsPrefix() + "No copy created.");
             }
-            this.bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file), StandardCharsets.UTF_8));
+            this.bufferedReader = new BufferedReader(new InputStreamReader(Files.newInputStream(this.file.toPath()), StandardCharsets.UTF_8));
             String line;
             line = this.bufferedReader.readLine();
 
@@ -183,7 +184,7 @@ public class FileProperties {
                 this.lines.add(line);
                 line = this.bufferedReader.readLine();
             }
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file), StandardCharsets.UTF_8));
+            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(this.file.toPath()), StandardCharsets.UTF_8));
             for(String l : this.lines) {
                 this.bufferedWriter.write(l);
                 this.bufferedWriter.newLine();
@@ -245,10 +246,10 @@ public class FileProperties {
             line = this.bufferedReader.readLine();
 
             while(line != null) {
-                if(line.startsWith(key)) {
-                    if(line.contains(this.keyValueSeparator.getSeparator())) {
-                        final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
+                if(line.contains(this.keyValueSeparator.getSeparator())) {
+                    final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
 
+                    if(keyValueArray[0].equals(key)) {
                         if(keyValueArray.length >= 3) {
                             for(int i = 2; i < keyValueArray.length; i++) {
                                 keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
@@ -362,10 +363,10 @@ public class FileProperties {
                 boolean containsLine = false;
 
                 for(String line : this.lines) {
-                    if(line.startsWith(key)) {
-                        if(line.contains(this.keyValueSeparator.getSeparator())) {
-                            final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
+                    if(line.contains(this.keyValueSeparator.getSeparator())) {
+                        final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
 
+                        if(keyValueArray[0].equals(key)) {
                             if(keyValueArray.length >= 3) {
                                 for(int i = 2; i < keyValueArray.length; i++) {
                                     keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
@@ -382,7 +383,7 @@ public class FileProperties {
                 if(!containsLine) {
                     this.lines.add(line);
                 }
-                this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file), StandardCharsets.UTF_8));
+                this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(this.file.toPath()), StandardCharsets.UTF_8));
                 for(String l : this.lines) {
                     this.bufferedWriter.write(l);
                     this.bufferedWriter.newLine();
@@ -464,5 +465,40 @@ public class FileProperties {
      */
     public void setBoolean(String key, boolean value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
+    }
+
+    public boolean contains(String key) {
+        boolean contains = false;
+
+        for(int i = 0; i <= 4; i++) {
+            try {
+                switch(i) {
+                    case 0:
+                        this.getString(key);
+                        contains = true;
+                        break;
+                    case 1:
+                        this.getInteger(key);
+                        contains = true;
+                        break;
+                    case 2:
+                        this.getDouble(key);
+                        contains = true;
+                        break;
+                    case 3:
+                        this.getFloat(key);
+                        contains = true;
+                        break;
+                    case 4:
+                        this.getBoolean(key);
+                        contains = true;
+                        break;
+                    default:
+                        break;
+                }
+            } catch(IllegalArgumentException ignored) {
+            }
+        }
+        return contains;
     }
 }
