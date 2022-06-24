@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertiesFile {
+public class FileProperties {
 
     private final String path, name, absolutePath;
     private final StandardFileCreationType standardFileCreationType;
@@ -26,7 +26,7 @@ public class PropertiesFile {
      */
     public static final String FILE_EXTENSION = ".proper";
 
-    public PropertiesFile(String path, String name, StandardFileCreationType standardFileCreationType, StandardDirectoryCreationType standardDirectoryCreationType, KeyValueSeparator keyValueSeparator) {
+    public FileProperties(String path, String name, StandardFileCreationType standardFileCreationType, StandardDirectoryCreationType standardDirectoryCreationType, KeyValueSeparator keyValueSeparator) {
         this.path = path;
         this.name = name + FILE_EXTENSION;
         this.absolutePath = this.path + this.name;
