@@ -229,6 +229,41 @@ public class FileProperties {
         }
     }
 
+    public boolean contains(String key) {
+        boolean contains = false;
+
+        for(int i = 0; i <= 4; i++) {
+            try {
+                switch(i) {
+                    case 0:
+                        this.getString(key);
+                        contains = true;
+                        break;
+                    case 1:
+                        this.getInteger(key);
+                        contains = true;
+                        break;
+                    case 2:
+                        this.getDouble(key);
+                        contains = true;
+                        break;
+                    case 3:
+                        this.getFloat(key);
+                        contains = true;
+                        break;
+                    case 4:
+                        this.getBoolean(key);
+                        contains = true;
+                        break;
+                    default:
+                        break;
+                }
+            } catch(IllegalArgumentException ignored) {
+            }
+        }
+        return contains;
+    }
+
     /**
      * Get a {@link String} value from a {@link String} key with/without quotation marks.
      *
@@ -467,38 +502,33 @@ public class FileProperties {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
-    public boolean contains(String key) {
-        boolean contains = false;
-
-        for(int i = 0; i <= 4; i++) {
-            try {
-                switch(i) {
-                    case 0:
-                        this.getString(key);
-                        contains = true;
-                        break;
-                    case 1:
-                        this.getInteger(key);
-                        contains = true;
-                        break;
-                    case 2:
-                        this.getDouble(key);
-                        contains = true;
-                        break;
-                    case 3:
-                        this.getFloat(key);
-                        contains = true;
-                        break;
-                    case 4:
-                        this.getBoolean(key);
-                        contains = true;
-                        break;
-                    default:
-                        break;
-                }
-            } catch(IllegalArgumentException ignored) {
-            }
+    public void setDefaultString(String key, String value) {
+        if(!this.contains(key)) {
+            this.setString(key, value);
         }
-        return contains;
+    }
+
+    public void setDefaultInteger(String key, int value) {
+        if(!this.contains(key)) {
+            this.setInteger(key, value);
+        }
+    }
+
+    public void setDefaultDouble(String key, double value) {
+        if(!this.contains(key)) {
+            this.setDouble(key, value);
+        }
+    }
+
+    public void setDefaultFloat(String key, float value) {
+        if(!this.contains(key)) {
+            this.setFloat(key, value);
+        }
+    }
+
+    public void setDefaultBoolean(String key, boolean value) {
+        if(!this.contains(key)) {
+            this.setBoolean(key, value);
+        }
     }
 }
