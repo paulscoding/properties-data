@@ -20,3 +20,7 @@ PropertiesFile file = new PropertiesFile(
 ```java
 file.create();
 ```
+```java
+file.getString("language")
+// It will return "Java" (without quotation marks).
+```
