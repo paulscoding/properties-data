@@ -11,7 +11,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileProperties {
+public class PropertiesFile {
 
     private final String path, name, absolutePath;
     private final StandardFileCreationType standardFileCreationType;
@@ -27,7 +27,7 @@ public class FileProperties {
      */
     public static final String FILE_EXTENSION = ".proper";
 
-    public FileProperties(String path, String name, StandardFileCreationType standardFileCreationType, StandardDirectoryCreationType standardDirectoryCreationType, KeyValueSeparator keyValueSeparator) {
+    public PropertiesFile(String path, String name, StandardFileCreationType standardFileCreationType, StandardDirectoryCreationType standardDirectoryCreationType, KeyValueSeparator keyValueSeparator) {
         this.path = path;
         this.name = name + FILE_EXTENSION;
         this.absolutePath = this.path + this.name;

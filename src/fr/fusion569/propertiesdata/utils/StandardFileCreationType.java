@@ -1,9 +1,9 @@
 package fr.fusion569.propertiesdata.utils;
 
-import fr.fusion569.propertiesdata.files.FileProperties;
+import fr.fusion569.propertiesdata.files.PropertiesFile;
 
 /**
- * This enumeration represents standard file creation type when the {@link FileProperties} {@link java.io.File} is created.
+ * This enumeration represents standard file creation type when the {@link PropertiesFile} {@link java.io.File} is created.
  */
 public enum StandardFileCreationType {
 
