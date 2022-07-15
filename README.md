@@ -17,3 +17,6 @@ PropertiesFile file = new PropertiesFile(
                 KeyValueSeparator.DOUBLE_POINTS_AND_SPACE
         );
 ```
+```java
+file.create();
+```
