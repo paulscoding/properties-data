@@ -229,6 +229,15 @@ public class PropertiesFile {
         }
     }
 
+    /**
+     * Check if an elements exists from a {@link String} key.
+     *
+     * @param key
+     * The key to check an elements exists.
+     *
+     * @return
+     * True if the element from the {@link String} exists. False if not.
+     */
     public boolean contains(String key) {
         boolean contains = false;
 
@@ -269,6 +278,9 @@ public class PropertiesFile {
      *
      * @param key
      * The {@link String} key to get a {@link String} value with/without quotation marks.
+     *
+     * @param withQuotationMarks
+     * True to add quotation marks condition, else, false.
      *
      * @return
      * A {@link String} value from a {@link String} key with/without quotation marks.
@@ -502,30 +514,75 @@ public class PropertiesFile {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
+    /**
+     * Set a {@link String} value from a {@link String} key if the element doesn't exist.
+     *
+     * @param key
+     * The {@link String} key to set a {@link String} value if the element doesn't exist.
+     *
+     * @param value
+     * The {@link String} value set from a {@link String} key if the element doesn't exist.
+     */
     public void setDefaultString(String key, String value) {
         if(!this.contains(key)) {
             this.setString(key, value);
         }
     }
 
+    /**
+     * Set a {@link Integer} value from a {@link String} key if the element doesn't exist.
+     *
+     * @param key
+     * The {@link String} key to set a {@link Integer} value if the element doesn't exist.
+     *
+     * @param value
+     * The {@link Integer} value set from a {@link String} key if the element doesn't exist.
+     */
     public void setDefaultInteger(String key, int value) {
         if(!this.contains(key)) {
             this.setInteger(key, value);
         }
     }
 
+    /**
+     * Set a {@link Double} value from a {@link String} key if the element doesn't exist.
+     *
+     * @param key
+     * The {@link String} key to set a {@link Double} value if the element doesn't exist.
+     *
+     * @param value
+     * The {@link Double} value set from a {@link String} key if the element doesn't exist.
+     */
     public void setDefaultDouble(String key, double value) {
         if(!this.contains(key)) {
             this.setDouble(key, value);
         }
     }
 
+    /**
+     * Set a {@link Float} value from a {@link String} key if the element doesn't exist.
+     *
+     * @param key
+     * The {@link String} key to set a {@link Float} value if the element doesn't exist.
+     *
+     * @param value
+     * The {@link Float} value set from a {@link String} key if the element doesn't exist.
+     */
     public void setDefaultFloat(String key, float value) {
         if(!this.contains(key)) {
             this.setFloat(key, value);
         }
     }
 
+    /**
+     * Set a {@link Boolean} value from a {@link String} key if the element doesn't exist.
+     *
+     * @param key
+     * The {@link String} key to set a {@link Boolean} value if the element doesn't exist.
+     *
+     * @param value
+     * The {@link Boolean} value set from a {@link String} key if the element doesn't exist.
+     */
     public void setDefaultBoolean(String key, boolean value) {
         if(!this.contains(key)) {
             this.setBoolean(key, value);
