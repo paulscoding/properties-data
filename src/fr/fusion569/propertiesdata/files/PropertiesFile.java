@@ -336,8 +336,8 @@ public class PropertiesFile {
         return this.getStringWithQuotationMarksCondition(key, true);
     }
 
-    /**
-     * Get a {@link Integer} value from a {@link String} key.
+     /**
+     * Get an {@link Integer} value from a {@link String} key.
      *
      * @param key
      * The {@link String} key to get a {@link Integer} value.
