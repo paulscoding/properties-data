@@ -9,6 +9,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PropertiesFile {
@@ -386,6 +388,99 @@ public class PropertiesFile {
      */
     public boolean getBoolean(String key) {
         return Boolean.parseBoolean(this.getStringWithQuotationMarksCondition(key, false));
+    }
+
+    private List<String> getStringListWithQuotationMarksCondition(String key, boolean withQuotationMarks) {
+        this.throwKeyExceptions(key);
+        String line;
+
+        try {
+            line = this.bufferedReader.readLine();
+
+            while(line != null) {
+                if(line.contains(this.keyValueSeparator.getSeparator())) {
+                    final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
+
+                    if(keyValueArray[0].equals(key)) {
+                        if(keyValueArray.length >= 3) {
+                            for(int i = 2; i < keyValueArray.length; i++) {
+                                keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
+                            }
+                        }
+                        this.resetBufferedReader();
+                        final StringBuilder builder = new StringBuilder();
+
+                        for(char c : keyValueArray[1].toCharArray()) {
+                            builder.append(c);
+                        }
+                        final String[] bruteElements = builder.substring(1, builder.toString().length() - 1).split(", ");
+
+                        final List<String> elements = new ArrayList<>(Arrays.asList(bruteElements));
+
+                        if(withQuotationMarks) {
+                            boolean mustDeclareException = false;
+
+                            for(String s : elements) {
+                                if(!(s.startsWith("\"") && s.endsWith("\""))) {
+                                    mustDeclareException = true;
+                                    break;
+                                }
+                            }
+                            if(mustDeclareException) {
+                                throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Your element of your array must include \" at end and the beginning.");
+                            }
+                            elements.replaceAll(s -> s.substring(1, s.length() - 1));
+                        }
+                        return elements;
+                    }
+                }
+                line = this.bufferedReader.readLine();
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        this.resetBufferedReader();
+        throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
+    }
+
+    public List<String> getStringList(String key) {
+        return this.getStringListWithQuotationMarksCondition(key, true);
+    }
+
+    public List<Integer> getIntegerList(String key) {
+        final List<Integer> list = new ArrayList<>();
+
+        for(String s : this.getStringListWithQuotationMarksCondition(key, false)) {
+            list.add(Integer.parseInt(s));
+        }
+        return list;
+    }
+
+    public List<Double> getDoubleList(String key) {
+        final List<Double> list = new ArrayList<>();
+
+        for(String s : this.getStringListWithQuotationMarksCondition(key, false)) {
+            list.add(Double.parseDouble(s));
+        }
+        return list;
+    }
+
+    public List<Float> getFloatList(String key) {
+        final List<Float> list = new ArrayList<>();
+
+        for(String s : this.getStringListWithQuotationMarksCondition(key, false)) {
+            list.add(Float.parseFloat(s));
+        }
+        return list;
+    }
+
+    public List<Boolean> getBooleanList(String key) {
+        final List<Boolean> list = new ArrayList<>();
+
+        for(String s : this.getStringListWithQuotationMarksCondition(key, false)) {
+            list.add(Boolean.parseBoolean(s));
+        }
+        return list;
     }
 
     /**

@@ -1,5 +1,10 @@
 package fr.fusion569.propertiesdata;
 
+import fr.fusion569.propertiesdata.files.PropertiesFile;
+import fr.fusion569.propertiesdata.utils.KeyValueSeparator;
+import fr.fusion569.propertiesdata.utils.StandardDirectoryCreationType;
+import fr.fusion569.propertiesdata.utils.StandardFileCreationType;
+
 /**
  * This class represents the main class.
  */
@@ -34,5 +39,12 @@ public final class PropertiesData {
      */
     public static void setLogsPrefix(String logsPrefix) {
         LOGS_PREFIX = logsPrefix;
+    }
+
+    public static void main(String[] args) {
+        final PropertiesFile file = new PropertiesFile("", "data", StandardFileCreationType.ONLY_WANTED_FILE, StandardDirectoryCreationType.IGNORE, KeyValueSeparator.DOUBLE_POINTS_AND_SPACE);
+
+        file.create();
+        file.getBooleanList("list").forEach(System.out::println);
     }
 }
