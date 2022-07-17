@@ -402,12 +402,12 @@ public class PropertiesFile {
                     final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
 
                     if(keyValueArray[0].equals(key)) {
-                        if(keyValueArray[1].startsWith("[") && keyValueArray[1].endsWith("]")) {
-                            if(keyValueArray.length >= 3) {
-                                for(int i = 2; i < keyValueArray.length; i++) {
-                                    keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
-                                }
+                        if(keyValueArray.length >= 3) {
+                            for(int i = 2; i < keyValueArray.length; i++) {
+                                keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
                             }
+                        }
+                        if(keyValueArray[1].startsWith("[") && keyValueArray[1].endsWith("]")) {
                             this.resetBufferedReader();
                             final StringBuilder builder = new StringBuilder();
 
