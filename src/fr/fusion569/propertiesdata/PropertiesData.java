@@ -40,11 +40,4 @@ public final class PropertiesData {
     public static void setLogsPrefix(String logsPrefix) {
         LOGS_PREFIX = logsPrefix;
     }
-
-    public static void main(String[] args) {
-        final PropertiesFile file = new PropertiesFile("", "data", StandardFileCreationType.ONLY_WANTED_FILE, StandardDirectoryCreationType.IGNORE, KeyValueSeparator.DOUBLE_POINTS_AND_SPACE);
-
-        file.create();
-        file.getBooleanList("list").forEach(System.out::println);
-    }
 }
