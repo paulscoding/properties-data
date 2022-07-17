@@ -433,6 +433,7 @@ public class PropertiesFile {
                                     throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Your element of your array must include \" at end and the beginning.");
                                 }
                             }
+                            this.resetBufferedReader();
                             return elements;
                         }
                         throw new IllegalArgumentException("Your value must include a [ and a ] at the end and the beginning");
