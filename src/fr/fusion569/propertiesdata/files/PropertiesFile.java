@@ -427,13 +427,13 @@ public class PropertiesFile {
                                         break;
                                     }
                                 }
+                                this.resetBufferedReader();
                                 if(!mustDeclareException) {
                                     elements.replaceAll(s -> s.substring(1, s.length() - 1));
                                 } else {
                                     throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Your element of your array must include \" at end and the beginning.");
                                 }
                             }
-                            this.resetBufferedReader();
                             return elements;
                         }
                         throw new IllegalArgumentException("Your value must include a [ and a ] at the end and the beginning");
@@ -612,6 +612,63 @@ public class PropertiesFile {
      */
     public void setBoolean(String key, boolean value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
+    }
+
+    private <V> void setStringListWithQuotationMarksCondition(String key, List<V> value, boolean withQuotationMarks) {
+        this.throwKeyExceptions(key);
+        String line;
+
+        try {
+            line = this.bufferedReader.readLine();
+
+            while(line != null) {
+                if(line.contains(this.keyValueSeparator.getSeparator())) {
+                    final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
+
+                    if(keyValueArray[0].equals(key)) {
+                        if(keyValueArray.length >= 3) {
+                            for(int i = 2; i < keyValueArray.length; i++) {
+                                keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
+                            }
+                        }
+                        if(keyValueArray[1].startsWith("[") && keyValueArray[1].endsWith("]")) {
+                            final StringBuilder builder = new StringBuilder();
+
+                            for(char c : keyValueArray[1].toCharArray()) {
+                                builder.append(c);
+                            }
+                            final String[] bruteElements = builder.substring(1, builder.toString().length() - 1).split(", ");
+
+                            final List<String> elements = new ArrayList<>(Arrays.asList(bruteElements));
+
+                            if(withQuotationMarks) {
+                                boolean mustDeclareException = false;
+
+                                for(String s : elements) {
+                                    if(!(s.startsWith("\"") && s.endsWith("\""))) {
+                                        mustDeclareException = true;
+                                        break;
+                                    }
+                                }
+                                if(!mustDeclareException) {
+                                    elements.replaceAll(s -> s.substring(1, s.length() - 1));
+                                } else {
+                                    throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Your element of your array must include \" at end and the beginning.");
+                                }
+                            }
+                            this.resetBufferedReader();
+                            return elements;
+                        }
+                        throw new IllegalArgumentException("Your value must include a [ and a ] at the end and the beginning");
+                    }
+                }
+                line = this.bufferedReader.readLine();
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        this.resetBufferedReader();
+        throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
     }
 
     /**
