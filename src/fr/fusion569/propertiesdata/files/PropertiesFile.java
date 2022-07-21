@@ -285,7 +285,8 @@ public class PropertiesFile {
                     default:
                         this.getBooleanList(key);
                         contains = true;
-                        break;                }
+                        break;
+                }
             } catch(IllegalArgumentException ignored) {
             }
         }
