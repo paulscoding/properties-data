@@ -243,7 +243,7 @@ public class PropertiesFile {
     public boolean contains(String key) {
         boolean contains = false;
 
-        for(int i = 0; i <= 4; i++) {
+        for(int i = 0; i <= 5; i++) {
             try {
                 switch(i) {
                     case 0:
@@ -266,9 +266,26 @@ public class PropertiesFile {
                         this.getBoolean(key);
                         contains = true;
                         break;
-                    default:
+                    case 5:
+                        this.getStringList(key);
+                        contains = true;
                         break;
-                }
+                    case 6:
+                        this.getIntegerList(key);
+                        contains = true;
+                        break;
+                    case 7:
+                        this.getDoubleList(key);
+                        contains = true;
+                        break;
+                    case 8:
+                        this.getFloatList(key);
+                        contains = true;
+                        break;
+                    default:
+                        this.getBooleanList(key);
+                        contains = true;
+                        break;                }
             } catch(IllegalArgumentException ignored) {
             }
         }
@@ -342,7 +359,7 @@ public class PropertiesFile {
      * Get an {@link Integer} value from a {@link String} key.
      *
      * @param key
-     * The {@link String} key to get a {@link Integer} value.
+     * The {@link String} key to get an {@link Integer} value.
      *
      * @return
      * An {@link Integer} value from a {@link String} key.
@@ -566,7 +583,7 @@ public class PropertiesFile {
      * Set an {@link Integer} value from a {@link String} key.
      *
      * @param key
-     * The {@link String} key to set a {@link Integer} value.
+     * The {@link String} key to set an {@link Integer} value.
      *
      * @param value
      * The {@link Integer} value set from a {@link String} key.
@@ -614,6 +631,7 @@ public class PropertiesFile {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
+    /*
     private <V> void setStringListWithQuotationMarksCondition(String key, List<V> value, boolean withQuotationMarks) {
         this.throwKeyExceptions(key);
         String line;
@@ -670,6 +688,7 @@ public class PropertiesFile {
         this.resetBufferedReader();
         throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
     }
+     */
 
     /**
      * Set a {@link String} value from a {@link String} key if the element doesn't exist.
@@ -687,10 +706,10 @@ public class PropertiesFile {
     }
 
     /**
-     * Set a {@link Integer} value from a {@link String} key if the element doesn't exist.
+     * Set an {@link Integer} value from a {@link String} key if the element doesn't exist.
      *
      * @param key
-     * The {@link String} key to set a {@link Integer} value if the element doesn't exist.
+     * The {@link String} key to set an {@link Integer} value if the element doesn't exist.
      *
      * @param value
      * The {@link Integer} value set from a {@link String} key if the element doesn't exist.
