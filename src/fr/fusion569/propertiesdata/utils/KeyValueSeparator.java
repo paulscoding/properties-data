@@ -16,11 +16,11 @@ public enum KeyValueSeparator {
     /**
      * The key value separator in the {@link java.io.File} will be "= ".
      */
-    EQUAL_AND_SPACE("= "),
+    EQUAL_SPACE("= "),
     /**
      * The key value separator in the {@link java.io.File} will be " = ".
      */
-    SPACE_THEN_EQUAL_THEN_SPACE(" = "),
+    SPACE_EQUAL_SPACE(" = "),
     /**
      * The key value separator in the {@link java.io.File} will be ":".
      */
@@ -28,11 +28,11 @@ public enum KeyValueSeparator {
     /**
      * The key value separator in the {@link java.io.File} will be ": ".
      */
-    DOUBLE_POINTS_AND_SPACE(": "),
+    DOUBLE_POINTS_SPACE(": "),
     /**
      * The key value separator in the {@link java.io.File} will be " : ".
      */
-    SPACE_THEN_DOUBLE_POINTS_THEN_SPACE(" : ");
+    SPACE_DOUBLE_POINTS_SPACE(" : ");
 
     private final String separator;
 

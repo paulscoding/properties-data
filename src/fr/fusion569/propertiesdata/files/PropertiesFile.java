@@ -4,10 +4,12 @@ import fr.fusion569.propertiesdata.PropertiesData;
 import fr.fusion569.propertiesdata.utils.KeyValueSeparator;
 import fr.fusion569.propertiesdata.utils.StandardDirectoryCreationType;
 import fr.fusion569.propertiesdata.utils.StandardFileCreationType;
+import jdk.internal.util.xml.impl.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -179,6 +181,7 @@ public class PropertiesFile {
                 System.out.println(PropertiesData.getLogsPrefix() + "No copy created.");
             }
             this.bufferedReader = new BufferedReader(new InputStreamReader(Files.newInputStream(this.file.toPath()), StandardCharsets.UTF_8));
+
             String line;
             line = this.bufferedReader.readLine();
 
@@ -226,7 +229,7 @@ public class PropertiesFile {
         if(key.equals("")) {
             throw new IllegalArgumentException("You must set a valid String key");
         }
-        if(key.startsWith(" ")) {
+        else if(key.startsWith(" ")) {
             throw new IllegalArgumentException("Your String key can't starts with ' '.");
         }
     }
@@ -243,7 +246,7 @@ public class PropertiesFile {
     public boolean contains(String key) {
         boolean contains = false;
 
-        for(int i = 0; i <= 5; i++) {
+        for(int i = 0; i <= 10; i++) {
             try {
                 switch(i) {
                     case 0:
@@ -426,16 +429,10 @@ public class PropertiesFile {
                             }
                         }
                         if(keyValueArray[1].startsWith("[") && keyValueArray[1].endsWith("]")) {
-                            this.resetBufferedReader();
-                            final StringBuilder builder = new StringBuilder();
-
-                            for(char c : keyValueArray[1].toCharArray()) {
-                                builder.append(c);
-                            }
-                            final String[] bruteElements = builder.substring(1, builder.toString().length() - 1).split(", ");
-
+                            final String[] bruteElements = keyValueArray[1].substring(1, keyValueArray[1].length() - 1).split(", ");
                             final List<String> elements = new ArrayList<>(Arrays.asList(bruteElements));
 
+                            this.resetBufferedReader();
                             if(withQuotationMarks) {
                                 boolean mustDeclareException = false;
 
@@ -445,7 +442,6 @@ public class PropertiesFile {
                                         break;
                                     }
                                 }
-                                this.resetBufferedReader();
                                 if(!mustDeclareException) {
                                     elements.replaceAll(s -> s.substring(1, s.length() - 1));
                                 } else {
@@ -538,8 +534,7 @@ public class PropertiesFile {
                                 }
                             }
                             containsLine = true;
-                            keyValueArray[1] = String.valueOf(value);
-                            this.lines.set(this.lines.indexOf(line), withQuotationMarks ? keyValueArray[0] + this.keyValueSeparator.getSeparator() + "\"" + keyValueArray[1] + "\"" : keyValueArray[0] + this.keyValueSeparator.getSeparator() + keyValueArray[1]);
+                            this.lines.set(this.lines.indexOf(line), withQuotationMarks ? keyValueArray[0] + this.keyValueSeparator.getSeparator() + "\"" + value + "\"" : keyValueArray[0] + this.keyValueSeparator.getSeparator() + value);
                         }
                     }
                 }
@@ -632,64 +627,75 @@ public class PropertiesFile {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
-    /*
     private <V> void setStringListWithQuotationMarksCondition(String key, List<V> value, boolean withQuotationMarks) {
         this.throwKeyExceptions(key);
-        String line;
+        final StringBuilder finalValue = new StringBuilder();
+
+        finalValue.append("[");
+        for(V element : value) {
+            finalValue.append(withQuotationMarks ? "\"" : "").append(element).append(withQuotationMarks ? "\"" : "").append(", ");
+        }
+        finalValue.append("]");
+        final String lineToAdd = key + this.keyValueSeparator.getSeparator() + finalValue.deleteCharAt(finalValue.toString().length() - 3).deleteCharAt(finalValue.toString().length() - 2);
 
         try {
-            line = this.bufferedReader.readLine();
+            boolean containsLine = false;
 
-            while(line != null) {
-                if(line.contains(this.keyValueSeparator.getSeparator())) {
-                    final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
+            if(!this.lines.isEmpty()) {
+                for(String line : this.lines) {
+                    if(line.contains(this.keyValueSeparator.getSeparator())) {
+                        final String[] keyValueArray = line.split(this.keyValueSeparator.getSeparator());
 
-                    if(keyValueArray[0].equals(key)) {
-                        if(keyValueArray.length >= 3) {
-                            for(int i = 2; i < keyValueArray.length; i++) {
-                                keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
-                            }
-                        }
-                        if(keyValueArray[1].startsWith("[") && keyValueArray[1].endsWith("]")) {
-                            final StringBuilder builder = new StringBuilder();
-
-                            for(char c : keyValueArray[1].toCharArray()) {
-                                builder.append(c);
-                            }
-                            final String[] bruteElements = builder.substring(1, builder.toString().length() - 1).split(", ");
-
-                            final List<String> elements = new ArrayList<>(Arrays.asList(bruteElements));
-
-                            if(withQuotationMarks) {
-                                boolean mustDeclareException = false;
-
-                                for(String s : elements) {
-                                    if(!(s.startsWith("\"") && s.endsWith("\""))) {
-                                        mustDeclareException = true;
-                                        break;
-                                    }
-                                }
-                                if(!mustDeclareException) {
-                                    elements.replaceAll(s -> s.substring(1, s.length() - 1));
-                                } else {
-                                    throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Your element of your array must include \" at end and the beginning.");
+                        if(keyValueArray[0].equals(key)) {
+                             if(keyValueArray.length >= 3) {
+                                for(int i = 2; i < keyValueArray.length; i++) {
+                                    keyValueArray[1] += this.keyValueSeparator.getSeparator() + keyValueArray[i];
                                 }
                             }
-                            this.resetBufferedReader();
-                            return elements;
+                            containsLine = true;
+                            this.lines.set(this.lines.indexOf(line), lineToAdd);
                         }
-                        throw new IllegalArgumentException("Your value must include a [ and a ] at the end and the beginning");
                     }
                 }
-                line = this.bufferedReader.readLine();
+                if(!containsLine) {
+                    this.lines.add(lineToAdd);
+                }
+                this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(this.file.toPath()), StandardCharsets.UTF_8));
+                for(String line : this.lines) {
+                    this.bufferedWriter.write(line);
+                    this.bufferedWriter.newLine();
+                }
+            } else {
+                this.lines.add(lineToAdd);
+                this.bufferedWriter.write(lineToAdd);
             }
+            this.bufferedWriter.flush();
+            return;
         } catch(IOException e) {
             e.printStackTrace();
         }
-        this.resetBufferedReader();
         throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
     }
-     */
+
+    public void setStringList(String key, List<String> list) {
+        this.setStringListWithQuotationMarksCondition(key, list, true);
+    }
+
+    public void setIntegerList(String key, List<Integer> list) {
+        this.setStringListWithQuotationMarksCondition(key, list, false);
+    }
+
+    public void setDoubleList(String key, List<Double> list) {
+        this.setStringListWithQuotationMarksCondition(key, list, false);
+    }
+
+    public void setFloatList(String key, List<Float> list) {
+        this.setStringListWithQuotationMarksCondition(key, list, false);
+    }
+
+    public void setBooleanList(String key, List<Boolean> list) {
+        this.setStringListWithQuotationMarksCondition(key, list, false);
+    }
 
     /**
      * Set a {@link String} value from a {@link String} key if the element doesn't exist.
@@ -763,6 +769,36 @@ public class PropertiesFile {
     public void setDefaultBoolean(String key, boolean value) {
         if(!this.contains(key)) {
             this.setBoolean(key, value);
+        }
+    }
+
+    public void setDefaultStringList(String key, List<String> list) {
+        if(!this.contains(key)) {
+            this.setStringList(key, list);
+        }
+    }
+
+    public void setDefaultIntegerList(String key, List<Integer> list) {
+        if(!this.contains(key)) {
+            this.setIntegerList(key, list);
+        }
+    }
+
+    public void setDefaultDoubleList(String key, List<Double> list) {
+        if(!this.contains(key)) {
+            this.setDoubleList(key, list);
+        }
+    }
+
+    public void setDefaultFloatList(String key, List<Float> list) {
+        if(!this.contains(key)) {
+            this.setFloatList(key, list);
+        }
+    }
+
+    public void setDefaultBooleanList(String key, List<Boolean> list) {
+        if(!this.contains(key)) {
+            this.setBooleanList(key, list);
         }
     }
 }

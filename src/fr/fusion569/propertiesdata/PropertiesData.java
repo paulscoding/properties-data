@@ -5,6 +5,11 @@ import fr.fusion569.propertiesdata.utils.KeyValueSeparator;
 import fr.fusion569.propertiesdata.utils.StandardDirectoryCreationType;
 import fr.fusion569.propertiesdata.utils.StandardFileCreationType;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * This class represents the main class.
  */
