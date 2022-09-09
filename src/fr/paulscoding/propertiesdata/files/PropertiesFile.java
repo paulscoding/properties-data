@@ -1,18 +1,15 @@
-package fr.fusion569.propertiesdata.files;
+package fr.paulscoding.propertiesdata.files;
 
-import fr.fusion569.propertiesdata.PropertiesData;
-import fr.fusion569.propertiesdata.utils.KeyValueSeparator;
-import fr.fusion569.propertiesdata.utils.StandardDirectoryCreationType;
-import fr.fusion569.propertiesdata.utils.StandardFileCreationType;
-import jdk.internal.util.xml.impl.Pair;
+import fr.paulscoding.propertiesdata.PropertiesData;
+import fr.paulscoding.propertiesdata.utils.KeyValueSeparator;
+import fr.paulscoding.propertiesdata.utils.StandardDirectoryCreationType;
+import fr.paulscoding.propertiesdata.utils.StandardFileCreationType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class PropertiesFile {

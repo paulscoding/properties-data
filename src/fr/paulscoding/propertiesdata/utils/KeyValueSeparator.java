@@ -1,4 +1,4 @@
-package fr.fusion569.propertiesdata.utils;
+package fr.paulscoding.propertiesdata.utils;
 
 /**
  * This enumeration represents the key value separator in the {@link java.io.File}.
