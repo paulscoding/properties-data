@@ -1,9 +1,9 @@
-package fr.paulscoding.propertiesdata.files;
+package fr.paulscoding.propertiesdata.file;
 
 import fr.paulscoding.propertiesdata.PropertiesData;
-import fr.paulscoding.propertiesdata.utils.KeyValueSeparator;
-import fr.paulscoding.propertiesdata.utils.StandardDirectoryCreationType;
-import fr.paulscoding.propertiesdata.utils.StandardFileCreationType;
+import fr.paulscoding.propertiesdata.util.KeyValueSeparator;
+import fr.paulscoding.propertiesdata.util.StandardDirectoryCreationType;
+import fr.paulscoding.propertiesdata.util.StandardFileCreationType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
