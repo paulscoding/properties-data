@@ -23,9 +23,6 @@ public class PropertiesFile {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
 
-    /**
-     * The {@link File} extension for a custom file properties.
-     */
     public static final String FILE_EXTENSION = ".proper";
 
     public PropertiesFile(String path, String name, StandardFileCreationType standardFileCreationType, StandardDirectoryCreationType standardDirectoryCreationType, KeyValueSeparator keyValueSeparator) {
@@ -39,109 +36,46 @@ public class PropertiesFile {
         this.lines = new ArrayList<>();
     }
 
-    /**
-     * Get the {@link String} {@link File} path.
-     *
-     * @return
-     * The {@link String} {@link File} path.
-     */
     public String getPath() {
         return path;
     }
 
-    /**
-     * Get the {@link String} {@link File} name.
-     *
-     * @return
-     * The {@link String} {@link File} name.
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Get the {@link String} {@link File} absolute path.
-     *
-     * @return
-     * The {@link String} {@link File} absolute path.
-     */
     public String getAbsolutePath() {
         return absolutePath;
     }
 
-    /**
-     * Get the {@link File}.
-     *
-     * @return
-     * The {@link File}.
-     */
     public StandardFileCreationType getStandardFileCreationType() {
         return standardFileCreationType;
     }
 
-    /**
-     * Get the {@link StandardDirectoryCreationType}.
-     *
-     * @return
-     * The {@link StandardDirectoryCreationType}.
-     */
     public StandardDirectoryCreationType getStandardDirectoryCreationType() {
         return standardDirectoryCreationType;
     }
 
-    /**
-     * Get the {@link KeyValueSeparator}.
-     *
-     * @return
-     * The {@link KeyValueSeparator}.
-     */
     public KeyValueSeparator getKeyValueSeparator() {
         return keyValueSeparator;
     }
 
-    /**
-     * Get the {@link File}.
-     *
-     * @return
-     * The {@link File}.
-     */
     public File getFile() {
         return file;
     }
 
-    /**
-     * Get the {@link String} {@link List} lines.
-     *
-     * @return
-     * The {@link String} {@link List} lines.
-     */
     public List<String> getLines() {
         return lines;
     }
 
-    /**
-     * Get the {@link BufferedReader}.
-     *
-     * @return
-     * The {@link BufferedReader}.
-     */
     public BufferedReader getBufferedReader() {
         return bufferedReader;
     }
 
-    /**
-     * Get the {@link BufferedWriter}.
-     *
-     * @return
-     * The {@link BufferedWriter}.
-     */
     public BufferedWriter getBufferedWriter() {
         return bufferedWriter;
     }
 
-    /**
-     * Close and make a new instance of the {@link BufferedReader}.
-     */
     private void resetBufferedReader() {
         try {
             this.bufferedReader.close();
@@ -151,9 +85,6 @@ public class PropertiesFile {
         }
     }
 
-    /**
-     * Create the {@link File} as constructor and its copy if the {@link StandardFileCreationType} as constructor is {@link StandardFileCreationType#WANTED_FILE_WITH_COPY}.
-     */
     public void create() {
         final File dir = new File(this.path);
 
@@ -198,9 +129,6 @@ public class PropertiesFile {
         }
     }
 
-    /**
-     * Create a {@link File} copy.
-     */
     private void createCopy() {
         final File copy = new File(this.path, "copy-" + this.name);
 
@@ -216,12 +144,6 @@ public class PropertiesFile {
         }
     }
 
-    /**
-     * Throw the exceptions {@link IllegalArgumentException} if the key is "" or starts with " ".
-     *
-     * @param key
-     * The key to declare exceptions if needed.
-     */
     private void throwKeyExceptions(String key) {
         if(key.equals("")) {
             throw new IllegalArgumentException("You must set a valid String key");
@@ -231,15 +153,6 @@ public class PropertiesFile {
         }
     }
 
-    /**
-     * Check if an elements exists from a {@link String} key.
-     *
-     * @param key
-     * The key to check an elements exists.
-     *
-     * @return
-     * True if the element from the {@link String} exists. False if not.
-     */
     public boolean contains(String key) {
         boolean contains = false;
 
@@ -293,18 +206,6 @@ public class PropertiesFile {
         return contains;
     }
 
-    /**
-     * Get a {@link String} value from a {@link String} key with/without quotation marks.
-     *
-     * @param key
-     * The {@link String} key to get a {@link String} value with/without quotation marks.
-     *
-     * @param withQuotationMarks
-     * True to add quotation marks condition, else, false.
-     *
-     * @return
-     * A {@link String} value from a {@link String} key with/without quotation marks.
-     */
     private String getStringWithQuotationMarksCondition(String key, boolean withQuotationMarks) {
         this.throwKeyExceptions(key);
         String line;
@@ -343,67 +244,22 @@ public class PropertiesFile {
         throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
     }
 
-    /**
-     * Get a {@link String} value from a {@link String} key with quotation marks.
-     *
-     * @param key
-     * The {@link String} key to get a {@link String} value with quotation marks.
-     *
-     * @return
-     * A {@link String} value from a {@link String} key with quotation marks.
-     */
     public String getString(String key) {
         return this.getStringWithQuotationMarksCondition(key, true);
     }
 
-     /**
-     * Get an {@link Integer} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to get an {@link Integer} value.
-     *
-     * @return
-     * An {@link Integer} value from a {@link String} key.
-     */
     public int getInteger(String key) {
         return Integer.parseInt(this.getStringWithQuotationMarksCondition(key, false));
     }
 
-    /**
-     * Get a {@link Double} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to get a {@link Double} value.
-     *
-     * @return
-     * A {@link Double} value from a {@link String} key.
-     */
     public double getDouble(String key) {
         return Double.parseDouble(this.getStringWithQuotationMarksCondition(key, false));
     }
 
-    /**
-     * Get a {@link Float} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to get a {@link Float} value.
-     *
-     * @return
-     * A {@link Float} value from a {@link String} key.
-     */
     public float getFloat(String key) {
         return Float.parseFloat(this.getStringWithQuotationMarksCondition(key, false));
     }
 
-    /**
-     * Get a {@link Boolean} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to get a {@link Boolean} value.
-     *
-     * @return
-     * A {@link Boolean} value from a {@link String} key.
-     */
     public boolean getBoolean(String key) {
         return Boolean.parseBoolean(this.getStringWithQuotationMarksCondition(key, false));
     }
@@ -499,21 +355,6 @@ public class PropertiesFile {
         return list;
     }
 
-    /**
-     * Set an {@link Object} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to set a {@link Object} value.
-     *
-     * @param value
-     * The {@link Object} value set from a {@link String} key.
-     *
-     * @param withQuotationMarks
-     * The condition to set or no the quotation marks at the end and the beginning of the {@link Object} value.
-     *
-     * @param <V>
-     * The value ({@link String}, {@link Integer}, {@link Double}, {@link Float}, {@link Boolean}) set in the {@link File} from a {@link String} key.
-     */
     private <V> void setStringWithQuotationMarksCondition(String key, V value, boolean withQuotationMarks) {
         this.throwKeyExceptions(key);
         try {
@@ -559,67 +400,22 @@ public class PropertiesFile {
         throw new IllegalArgumentException(PropertiesData.getLogsPrefix() + "Invalid key: '" + key + "' or key value separator '" + this.keyValueSeparator.getSeparator() + "'.");
     }
 
-    /**
-     * Set a {@link String} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to set a {@link String} value.
-     *
-     * @param value
-     * The {@link String} value set from a {@link String} key.
-     */
     public void setString(String key, String value) {
         this.setStringWithQuotationMarksCondition(key, value, true);
     }
 
-    /**
-     * Set an {@link Integer} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to set an {@link Integer} value.
-     *
-     * @param value
-     * The {@link Integer} value set from a {@link String} key.
-     */
     public void setInteger(String key, int value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
-    /**
-     * Set a {@link Double} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to set a {@link Double} value.
-     *
-     * @param value
-     * The {@link Double} value set from a {@link String} key.
-     */
     public void setDouble(String key, double value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
-    /**
-     * Set a {@link Float} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to set a {@link Float} value.
-     *
-     * @param value
-     * The {@link Float} value set from a {@link String} key.
-     */
     public void setFloat(String key, float value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
 
-    /**
-     * Set a {@link Boolean} value from a {@link String} key.
-     *
-     * @param key
-     * The {@link String} key to set a {@link Boolean} value.
-     *
-     * @param value
-     * The {@link Boolean} value set from a {@link String} key.
-     */
     public void setBoolean(String key, boolean value) {
         this.setStringWithQuotationMarksCondition(key, value, false);
     }
@@ -694,75 +490,30 @@ public class PropertiesFile {
         this.setStringListWithQuotationMarksCondition(key, list, false);
     }
 
-    /**
-     * Set a {@link String} value from a {@link String} key if the element doesn't exist.
-     *
-     * @param key
-     * The {@link String} key to set a {@link String} value if the element doesn't exist.
-     *
-     * @param value
-     * The {@link String} value set from a {@link String} key if the element doesn't exist.
-     */
     public void setDefaultString(String key, String value) {
         if(!this.contains(key)) {
             this.setString(key, value);
         }
     }
 
-    /**
-     * Set an {@link Integer} value from a {@link String} key if the element doesn't exist.
-     *
-     * @param key
-     * The {@link String} key to set an {@link Integer} value if the element doesn't exist.
-     *
-     * @param value
-     * The {@link Integer} value set from a {@link String} key if the element doesn't exist.
-     */
     public void setDefaultInteger(String key, int value) {
         if(!this.contains(key)) {
             this.setInteger(key, value);
         }
     }
 
-    /**
-     * Set a {@link Double} value from a {@link String} key if the element doesn't exist.
-     *
-     * @param key
-     * The {@link String} key to set a {@link Double} value if the element doesn't exist.
-     *
-     * @param value
-     * The {@link Double} value set from a {@link String} key if the element doesn't exist.
-     */
     public void setDefaultDouble(String key, double value) {
         if(!this.contains(key)) {
             this.setDouble(key, value);
         }
     }
 
-    /**
-     * Set a {@link Float} value from a {@link String} key if the element doesn't exist.
-     *
-     * @param key
-     * The {@link String} key to set a {@link Float} value if the element doesn't exist.
-     *
-     * @param value
-     * The {@link Float} value set from a {@link String} key if the element doesn't exist.
-     */
     public void setDefaultFloat(String key, float value) {
         if(!this.contains(key)) {
             this.setFloat(key, value);
         }
     }
 
-    /**
-     * Set a {@link Boolean} value from a {@link String} key if the element doesn't exist.
-     *
-     * @param key
-     * The {@link String} key to set a {@link Boolean} value if the element doesn't exist.
-     *
-     * @param value
-     * The {@link Boolean} value set from a {@link String} key if the element doesn't exist.
-     */
     public void setDefaultBoolean(String key, boolean value) {
         if(!this.contains(key)) {
             this.setBoolean(key, value);
