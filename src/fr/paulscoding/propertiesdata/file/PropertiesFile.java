@@ -85,7 +85,7 @@ public class PropertiesFile {
         }
     }
 
-    public void create() {
+    public PropertiesFile load() {
         final File dir = new File(this.path);
 
         try {
@@ -127,6 +127,7 @@ public class PropertiesFile {
         } catch(IOException e) {
             e.printStackTrace();
         }
+        return this;
     }
 
     private void createCopy() {
